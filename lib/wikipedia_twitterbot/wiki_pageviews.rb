@@ -12,8 +12,8 @@ class WikiPageviews
   # [date]   a specific date
   def self.views_for_article(title, opts = {})
     language = opts[:language] || 'en'
-    start_date = opts[:start_date] || 1.month.ago
-    end_date = opts[:end_date] || Time.zone.today
+    start_date = opts[:start_date] || (Date.today - 30)
+    end_date = opts[:end_date] || Date.today
     url = query_url(title, start_date, end_date, language)
     data = api_get url
     return unless data
@@ -50,8 +50,8 @@ class WikiPageviews
   # Helper methods #
   ##################
   def self.recent_views(title, language)
-    start_date = 50.days.ago
-    end_date = 1.day.ago
+    start_date = DateTime.now - 50
+    end_date = DateTime.now
     url = query_url(title, start_date, end_date, language)
     api_get url
   end
