@@ -1,6 +1,7 @@
 require "wikipedia_twitterbot/version"
 
 module WikipediaTwitterbot
+  require_relative 'wikipedia_twitterbot/article'
   require_relative 'wikipedia_twitterbot/wiki'
   require_relative 'wikipedia_twitterbot/wiki_pageviews'
   require_relative 'wikipedia_twitterbot/ores'
