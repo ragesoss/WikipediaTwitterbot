@@ -12,4 +12,5 @@ module WikipediaTwitterbot
   require_relative 'wikipedia_twitterbot/category_filter'
   require_relative 'wikipedia_twitterbot/discard_redirects'
   require_relative 'wikipedia_twitterbot/tweet'
+  require_relative 'wikipedia_twitterbot/db/bootstrap'
 end
