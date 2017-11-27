@@ -10,11 +10,11 @@ class DiscardRedirects
     articles.each do |article|
       info = pages[article.id.to_s]
       next unless info
-      if info['redirect']
-        article.redirect = true
-      else
-        article.redirect = false
-      end
+      article.redirect = if info['redirect']
+                           true
+                         else
+                           false
+                         end
     end
 
     articles.select! { |article| article.redirect == false }
@@ -23,7 +23,6 @@ class DiscardRedirects
 
   def self.page_info_query(page_ids)
     { prop: 'info',
-      pageids: page_ids
-    }
+      pageids: page_ids }
   end
 end

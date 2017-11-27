@@ -8,11 +8,11 @@ class Tweet
     # or the latest.
     # Wikipedia increments page ids over time, so the first ids are the oldest
     # articles and the last ids are the latest.
-    if coin_flip
-      article = Article.last_tweetable
-    else
-      article = Article.first_tweetable
-    end
+    article = if coin_flip
+                Article.last_tweetable
+              else
+                Article.first_tweetable
+              end
     article.tweet
     puts "Tweeted #{article.title}"
   end

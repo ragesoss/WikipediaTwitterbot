@@ -1,4 +1,4 @@
-require "wikipedia_twitterbot/version"
+require 'wikipedia_twitterbot/version'
 
 module WikipediaTwitterbot
   require_relative 'wikipedia_twitterbot/article'

@@ -55,11 +55,11 @@ class Wiki
       site = opts[:site]
       language = opts[:language] || 'en'
 
-      if site
-        url = "https://#{site}/w/api.php"
-      else
-        url = "https://#{language}.wikipedia.org/w/api.php"
-      end
+      url = if site
+              "https://#{site}/w/api.php"
+            else
+              "https://#{language}.wikipedia.org/w/api.php"
+            end
       MediawikiApi::Client.new url
     end
   end

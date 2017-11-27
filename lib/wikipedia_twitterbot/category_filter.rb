@@ -4,7 +4,7 @@ class CategoryFilter
   # Entry points #
   ################
   def self.discard_disambiguation_pages(articles)
-    articles.select! { |article| !disambiguation_page?(article) }
+    articles.reject! { |article| disambiguation_page?(article) }
     articles
   end
 
@@ -14,8 +14,7 @@ class CategoryFilter
   def self.category_query(page_id)
     { prop: 'categories',
       cllimit: 500,
-      pageids: page_id
-    }
+      pageids: page_id }
   end
 
   def self.categories_for(article)

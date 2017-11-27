@@ -8,8 +8,8 @@ class Ores
     articles.each do |article|
       article.ores_data = @ores.get_revision_data(article.latest_revision)
       puts article.ores_data.dig('scores', 'enwiki', 'wp10', 'features',
-                            article.latest_revision.to_s,
-                            'feature.enwiki.revision.image_links')
+                                 article.latest_revision.to_s,
+                                 'feature.enwiki.revision.image_links')
     end
     selected_articles = articles.select do |article|
       article.ores_data.dig('scores', 'enwiki', 'wp10', 'features',

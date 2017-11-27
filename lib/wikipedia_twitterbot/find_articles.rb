@@ -26,7 +26,7 @@ class FindArticles
   def self.at_random(count: 100)
     # As of December 2015, recently created articles have page ids under
     # 50_000_000.
-    ids = count.times.map { Random.rand(60_000_000) }
+    ids = Array.new(count) { Random.rand(60_000_000) }
     by_ids(ids)
   end
 
@@ -37,8 +37,7 @@ class FindArticles
   def self.revisions_query(article_ids)
     { prop: 'revisions',
       pageids: article_ids,
-      rvprop: 'userid|ids|timestamp'
-    }
+      rvprop: 'userid|ids|timestamp' }
   end
 
   def self.get_pages(article_ids)

@@ -31,12 +31,12 @@ class Article < ActiveRecord::Base
   end
 
   DEFAULT_OPTS = {
-    count: 10000,
+    count: 10_000,
     discard_redirects: true,
     min_views: 0,
     max_wp10: nil,
     discard_dabs: true
-  }
+  }.freeze
 
   def self.fetch_at_random(opts)
     options = DEFAULT_OPTS.merge opts
@@ -67,7 +67,7 @@ class Article < ActiveRecord::Base
     if articles.count > 0
       puts "#{articles.count} tweetable prospect(s) found!"
     else
-      puts "no tweetable articles found"
+      puts 'no tweetable articles found'
     end
 
     articles
