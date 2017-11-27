@@ -88,7 +88,7 @@ class Article < ActiveRecord::Base
   ####################
   # Instance methods #
   ####################
-  def tweet
+  def tweet(tweet_text)
     Tweet.new(tweet_text, filename: @image)
     self.tweeted = true
     save
