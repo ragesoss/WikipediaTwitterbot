@@ -26,6 +26,53 @@ class Article < ActiveRecord::Base
   # Class methods #
   #################
 
+  def self.import_at_random(opts)
+    import fetch_at_random(opts)
+  end
+
+  DEFAULT_OPTS = {
+    count: 10000,
+    discard_redirects: true,
+    min_views: 0,
+    max_wp10: nil,
+    discard_dabs: true
+  }
+
+  def self.fetch_at_random(opts)
+    options = DEFAULT_OPTS.merge opts
+
+    articles = FindArticles.at_random(count: options[:count])
+    puts "#{articles.count} mainspace articles found"
+
+    if options[:discard_redirects]
+      articles = DiscardRedirects.from(articles)
+      puts "#{articles.count} are not redirects"
+    end
+
+    if options[:min_views].positive?
+      articles = HighPageviews.from_among(articles, min_views: options[:min_views])
+      puts "#{articles.count} of those have high page views"
+    end
+
+    if options[:max_wp10]
+      articles = Ores.discard_high_revision_scores(articles, max_wp10: options[:max_wp10])
+      puts "#{articles.count} of those have low revision scores"
+    end
+
+    if options[:discard_dabs]
+      articles = CategoryFilter.discard_disambiguation_pages(articles)
+      puts "#{articles.count} of those are not disambiguation pages"
+    end
+
+    if articles.count > 0
+      puts "#{articles.count} tweetable prospect(s) found!"
+    else
+      puts "no tweetable articles found"
+    end
+
+    articles
+  end
+
   def self.last_tweetable
     tweetable.last
   end
