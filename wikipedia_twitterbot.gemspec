@@ -25,10 +25,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 10.0'
 
   spec.add_runtime_dependency 'sqlite3'
-  spec.add_runtime_dependency 'active_record'
+  spec.add_runtime_dependency 'activerecord'
   spec.add_runtime_dependency 'activerecord-import'
   spec.add_runtime_dependency 'twitter'
   spec.add_runtime_dependency 'mediawiki_api'
-  spec.add_runtime_dependency 'open-uri'
   spec.add_runtime_dependency 'logger'
 end
