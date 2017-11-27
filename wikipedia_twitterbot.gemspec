@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'wikipedia_twitterbot'
   spec.version       = WikipediaTwitterbot::VERSION
   spec.authors       = ['Sage Ross']
-  spec.email         = ['ragesoss@gmail.com']
+  spec.email         = ['sage@ragesoss.com']
 
   spec.summary       = 'Tools for building Wikipedia-focused Twitter bots'
   spec.homepage      = 'https://github.com/ragesoss/WikipediaTwitterbot'
