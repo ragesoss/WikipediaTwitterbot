@@ -1,38 +1,57 @@
 # WikipediaTwitterbot
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/wikipedia_twitterbot`. To experiment with that code, run `bin/console` for an interactive prompt.
+Gem for creating Twitter bots related to Wikipedia
 
-TODO: Delete this and the text above, and describe your gem
+## Get Twitter API credentials
 
-## Installation
+Create a twitter account for your bot and then register an app, and put the credentials in twitter.yml:
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'wikipedia_twitterbot'
+```
+twitter_consumer_key: ohai
+twitter_consumer_secret: kthxbai
+twitter_access_token: isee
+twitter_access_token_secret: whatyoudidthere
 ```
 
-And then execute:
+For more info, see https://github.com/sferik/twitter#configuration
 
-    $ bundle
+## Set up a database
 
-Or install it yourself as:
+Use this gem to create an article database, via irb:
 
-    $ gem install wikipedia_twitterbot
+```ruby
+require 'wikipedia_twitterbot'
+ArticleDatabase.create 'your_bot_name'
+```
 
-## Usage
+## Write your bot code
 
-TODO: Write usage instructions here
+Now you can write a bot. Here's what a basic one might look like:
 
-## Development
+```ruby
+require 'wikipedia_twitterbot'
+Article.connect_to_database 'braggingvandalbot'
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+class TrivialWikipediaBot
+  def self.tweet(article)
+    tweet_text = "#{article.title} is here: #{article.url}"
+    article.tweet tweet_text
+  end
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+  # adds random articles to the database matching the given criteria
+  def self.find_articles
+    options = {
+      max_w10: 30,
+      min_views: 300
+    }
+    Article.import_at_random(options)
+  end
+end
+```
 
-## Contributing
+`Article` provides both class methods for fetching and importing Wikipedia articles and metadata, and instance methods for supplying info about a particular article that you can use in tweets. See `article.rb` for more details.
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/wikipedia_twitterbot. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Make your but run by configuring cron jobs to import articles and tweet tweets about them.
 
 ## License
 
