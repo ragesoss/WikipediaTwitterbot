@@ -148,5 +148,21 @@ class Article < ActiveRecord::Base
     self.class.bot_name
   end
 
+  def wikilinks
+    return @links if @links.present?
+    query = { prop: 'links', titles: title, plnamespace: '0', pllimit: 500 }
+    response = Wiki.query query
+    @links = response.data['pages'].values.first['links'].map { |link| link['title'] }
+    @links
+  end
+
+  def page_text
+    @page_text ||= Wiki.get_page_content title
+  end
+
+  def sentence_with(text)
+    page_text[/[^.?!\n]*#{Regexp.quote text}[^.?!]*[.?!]/i]
+  end
+
   class NoImageError < StandardError; end
 end

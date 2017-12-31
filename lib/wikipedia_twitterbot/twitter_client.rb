@@ -30,4 +30,8 @@ class TwitterClient
   def hashtags_in(text)
     text.scan(/\s(#\w+)/).flatten
   end
+
+  def trends
+    @client.trends.map(&:name)
+  end
 end
