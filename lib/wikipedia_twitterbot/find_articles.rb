@@ -30,9 +30,25 @@ class FindArticles
     by_ids(ids)
   end
 
+  def self.by_title(title)
+    page_data = Wiki.query title_revisions_query(title)
+    article = page_data.data['pages'].values.first
+    revision = article['revisions'][0]
+    Article.new(id: article['pageid'],
+                title: article['title'],
+                latest_revision: revision['revid'],
+                latest_revision_datetime: revision['timestamp'])
+  end
+
   ####################
   # Internal methods #
   ####################
+
+  def self.title_revisions_query(title)
+    { prop: 'revisions',
+      titles: title,
+      rvprop: 'userid|ids|timestamp' }
+  end
 
   def self.revisions_query(article_ids)
     { prop: 'revisions',
