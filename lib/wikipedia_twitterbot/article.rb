@@ -91,7 +91,7 @@ class Article < ActiveRecord::Base
   # Instance methods #
   ####################
   def tweet(tweet_text, opts = {})
-    @tweet_result = Tweet.new(tweet_text, opts, filename: @image).result
+    @tweet_result = Tweet.new(tweet_text, opts).result
     self.tweeted = true
     save
     pp 'tweeted'
