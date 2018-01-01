@@ -21,8 +21,9 @@ class Tweet
   ###############
   # Twitter API #
   ###############
-  def initialize(tweet, opts = {}, filename: nil)
-    if filename
+  def initialize(tweet, opts = {})
+    if opts[:filename]
+      filename = opts.delete(:filename)
       Wiki.save_commons_image filename
       @result = TwitterClient.new.client.update_with_media(tweet, File.new(filename), opts)
       File.delete filename
