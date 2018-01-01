@@ -89,11 +89,12 @@ class Article < ActiveRecord::Base
   ####################
   # Instance methods #
   ####################
-  def tweet(tweet_text)
-    Tweet.new(tweet_text, filename: @image)
+  def tweet(tweet_text, opts = {})
+    @tweet_result = Tweet.new(tweet_text, opts, filename: @image).result
     self.tweeted = true
     save
-    'tweeted'
+    pp 'tweeted'
+    @tweet_result
   rescue StandardError => e
     self.failed_tweet_at = Time.now
     save

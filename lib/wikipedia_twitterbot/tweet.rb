@@ -2,6 +2,7 @@ require 'twitter'
 
 # Finds tweetable articles, tweets them
 class Tweet
+  attr_reader :result
   # Find an article to tweet and tweet it
   def self.anything
     # Randomly tweet either the earlier tweetable Article in the database
@@ -20,13 +21,13 @@ class Tweet
   ###############
   # Twitter API #
   ###############
-  def initialize(tweet, filename: nil)
+  def initialize(tweet, opts = {}, filename: nil)
     if filename
       Wiki.save_commons_image filename
-      TwitterClient.new.client.update_with_media(tweet, File.new(filename))
+      @result = TwitterClient.new.client.update_with_media(tweet, File.new(filename), opts)
       File.delete filename
     else
-      TwitterClient.new.client.update(tweet)
+      @result = TwitterClient.new.client.update(tweet, opts)
     end
   end
 
