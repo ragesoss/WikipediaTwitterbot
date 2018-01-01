@@ -30,4 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'twitter'
   spec.add_runtime_dependency 'mediawiki_api'
   spec.add_runtime_dependency 'logger'
+  spec.add_runtime_dependency 'pandoc-ruby'
 end

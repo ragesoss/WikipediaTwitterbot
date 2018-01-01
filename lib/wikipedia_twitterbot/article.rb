@@ -2,6 +2,7 @@ require 'active_record'
 require 'activerecord-import'
 require 'sqlite3'
 require 'logger'
+require 'pandoc-ruby'
 require_relative 'tweet'
 require_relative 'twitter_client'
 require_relative 'find_images'
@@ -160,8 +161,13 @@ class Article < ActiveRecord::Base
     @page_text ||= Wiki.get_page_content title
   end
 
+  def plaintext
+    @plaintext ||= PandocRuby.new(page_text, from: :mediawiki, to: :plain).convert
+  end
+
   def sentence_with(text)
-    page_text[/[^.?!\n]*#{Regexp.quote text}[^.?!]*[.?!]/i]
+    # TODO: Remove the plaintext footnote remnants
+    plaintext[/[^.?!\n]*#{Regexp.quote text}[^.?!]*[.?!]/i]
   end
 
   class NoImageError < StandardError; end
