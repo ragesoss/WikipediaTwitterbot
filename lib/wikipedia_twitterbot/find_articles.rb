@@ -31,6 +31,8 @@ class FindArticles
   end
 
   def self.by_title(title)
+    existing = Article.find_by(title: title)
+    return existing if existing.present?
     page_data = Wiki.query title_revisions_query(title)
     article = page_data.data['pages'].values.first
     revision = article['revisions'][0]
