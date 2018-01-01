@@ -22,11 +22,14 @@ class Tweet
   # Twitter API #
   ###############
   def initialize(tweet, opts = {})
-    if opts[:filename]
-      filename = opts.delete(:filename)
+    if opts[:commons_image]
+      filename = opts.delete(:commons_image)
       Wiki.save_commons_image filename
       @result = TwitterClient.new.client.update_with_media(tweet, File.new(filename), opts)
       File.delete filename
+    elsif opts[:filename]
+      filename = opts.delete(:filename)
+      @result = TwitterClient.new.client.update_with_media(tweet, File.new(filename), opts)
     else
       @result = TwitterClient.new.client.update(tweet, opts)
     end
