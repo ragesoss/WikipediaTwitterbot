@@ -3,6 +3,7 @@ require 'activerecord-import'
 require 'sqlite3'
 require 'logger'
 require 'pandoc-ruby'
+require 'fileutils'
 require_relative 'tweet'
 require_relative 'twitter_client'
 require_relative 'find_images'
@@ -102,6 +103,7 @@ class Article < ActiveRecord::Base
   end
 
   def screenshot_path
+    FileUtils.mkdir_p('screenshots') unless File.directory?('screenshots')
     "screenshots/#{escaped_title}.png"
   end
 
@@ -136,10 +138,16 @@ class Article < ActiveRecord::Base
     "https://en.wikipedia.org/wiki/#{escaped_title}?veaction=edit&summary=%23#{bot_name}"
   end
 
+  def dirp
+    pp RASTERIZE_PATH
+  end
+
+  RASTERIZE_PATH = "#{__dir__}/rasterize.js".freeze
   def make_screenshot
-    webshot = Webshot::Screenshot.instance
-    webshot.capture mobile_url, "public/#{screenshot_path}",
-                    width: 800, height: 800, allowed_status_codes: [404]
+    # Use rasterize script to make a screenshot
+    %x[phantomjs #{RASTERIZE_PATH} #{mobile_url} #{screenshot_path} 1000px*1000px]
+    # Trim any extra blank space, which may or may not be present.
+    %x[convert #{screenshot_path} -trim #{screenshot_path}]
   end
 
   def hashtag
