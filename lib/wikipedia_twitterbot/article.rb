@@ -2,11 +2,11 @@ require 'active_record'
 require 'activerecord-import'
 require 'sqlite3'
 require 'logger'
-require 'pandoc-ruby'
 require 'fileutils'
 require_relative 'tweet'
 require_relative 'twitter_client'
 require_relative 'find_images'
+require_relative 'article_text_cleaner'
 
 class Article < ActiveRecord::Base
   class << self
@@ -171,7 +171,7 @@ class Article < ActiveRecord::Base
   end
 
   def plaintext
-    @plaintext ||= PandocRuby.new(page_text, from: :mediawiki, to: :plain).convert
+    @plaintext = ArticleTextCleaner.convert(page_text)
   end
 
   def sentence_with(text)
