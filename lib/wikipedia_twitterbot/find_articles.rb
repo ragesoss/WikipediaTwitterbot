@@ -33,13 +33,18 @@ class FindArticles
   def self.by_title(title)
     existing = Article.find_by(title: title)
     return existing if existing.present?
-    page_data = Wiki.query title_revisions_query(title)
-    article = page_data.data['pages'].values.first
-    revision = article['revisions'][0]
-    Article.new(id: article['pageid'],
-                title: article['title'],
-                latest_revision: revision['revid'],
-                latest_revision_datetime: revision['timestamp'])
+    page_data = Wiki.query title_info_query(title)
+    article_data = page_data.data['pages'].values.first
+    article = Article.new(id: article_data['pageid'],
+                          title: article_data['title'],
+                          latest_revision: article_data['lastrevid'],
+                          latest_revision_datetime: article_data['touched'])
+
+    return article unless article_data['redirect']
+
+    # If it's a redirect, return the redirect target instead.
+    redirect_target = article.wikilinks.first
+    return by_title(redirect_target)
   end
 
   ####################
@@ -50,6 +55,11 @@ class FindArticles
     { prop: 'revisions',
       titles: title,
       rvprop: 'userid|ids|timestamp' }
+  end
+
+  def self.title_info_query(title)
+    { prop: 'info',
+      titles: title }
   end
 
   def self.revisions_query(article_ids)
