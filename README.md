@@ -51,7 +51,7 @@ end
 
 `Article` provides both class methods for fetching and importing Wikipedia articles and metadata, and instance methods for supplying info about a particular article that you can use in tweets. See `article.rb` for more details.
 
-Make your but run by configuring cron jobs to import articles and tweet tweets about them.
+Make your bot run by configuring cron jobs to import articles and tweet tweets about them.
 
 ## License
 
@@ -59,4 +59,4 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 ## Code of Conduct
 
-Everyone interacting in the WikipediaTwitterbot project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/wikipedia_twitterbot/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the WikipediaTwitterbot project’s codebase and issue trackeris expected to follow the [code of conduct](https://github.com/ragesoss/WikipediaTwitterbot/blob/master/CODE_OF_CONDUCT.md).
