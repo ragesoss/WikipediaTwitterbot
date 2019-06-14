@@ -23,10 +23,13 @@ class FindArticles
     articles
   end
 
-  def self.at_random(count: 100)
-    # As of December 2015, recently created articles have page ids under
-    # 50_000_000.
-    ids = Array.new(count) { Random.rand(60_000_000) }
+  def self.at_random(count: 100, new_only: false)
+    # As of June 2019, recently created articles have page ids under
+    # 62_000_000.
+    ids = Array.new(count) { Random.rand(70_000_000) }
+    if new_only
+      ids -= Article.all.pluck(:id)
+    end
     by_ids(ids)
   end
 

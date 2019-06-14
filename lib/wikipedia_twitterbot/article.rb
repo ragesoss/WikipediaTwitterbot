@@ -40,10 +40,20 @@ class Article < ActiveRecord::Base
     discard_dabs: true
   }.freeze
 
+  def self.fetch_new_article(opts = {})
+    known_articles = Article.all.pluck(:title)
+    loop do
+      articles = fetch_at_random(opts.merge({ discard_dabs: false, new_only: true }))
+      articles.reject! { |article| known_articles.include?(article.title)}
+      article = articles.detect { |article| pp article.title; !CategoryFilter.disambiguation_page?(article) }
+      return article unless article.nil?
+    end
+  end
+
   def self.fetch_at_random(opts)
     options = DEFAULT_OPTS.merge opts
 
-    articles = FindArticles.at_random(count: options[:count])
+    articles = FindArticles.at_random(count: options[:count], new_only: options[:new_only])
     puts "#{articles.count} mainspace articles found"
 
     if options[:discard_redirects]
@@ -180,4 +190,17 @@ class Article < ActiveRecord::Base
   end
 
   class NoImageError < StandardError; end
+
+  def wp10
+    return unless ores_data
+
+    probability = ores_data.dig('scores', 'enwiki', 'wp10', 'scores', latest_revision.to_s, 'probability')
+    mean = probability['FA'] * 100
+    mean += probability['GA'] * 80
+    mean += probability['B'] * 60
+    mean += probability['C'] * 40
+    mean += probability['Start'] * 20
+    mean += probability['Stub'] * 0
+    mean
+  end
 end

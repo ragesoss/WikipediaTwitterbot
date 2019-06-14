@@ -19,6 +19,20 @@ class Ores
     selected_articles
   end
 
+  def self.discard_high_revision_scores(articles, max_wp10: 30)
+    @ores = new
+    articles.each do |article|
+      article.ores_data = @ores.get_revision_data(article.latest_revision)
+    end
+    articles.reject! { |article| article.wp10.nil? }
+    articles.select! { |article| article.wp10 < max_wp10 }
+    articles
+  end
+
+  ###############
+  # Other stuff #
+  ###############
+
   def initialize
     @project_code = 'enwiki'
   end
