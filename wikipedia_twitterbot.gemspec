@@ -31,4 +31,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'mediawiki_api'
   spec.add_runtime_dependency 'logger'
   spec.add_runtime_dependency 'pandoc-ruby'
+  spec.add_runtime_dependency 'watir'
+  spec.add_runtime_dependency 'webdrivers'
 end

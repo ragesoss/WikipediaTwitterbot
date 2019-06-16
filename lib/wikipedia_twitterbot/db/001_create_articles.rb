@@ -16,6 +16,9 @@ class CreateArticles < ActiveRecord::Migration[5.1]
       t.integer :image_count
       t.string :first_image_url
       t.timestamp :failed_tweet_at
+      t.integer :experiment_condition
+      t.text :details
+      t.integer :experiment_pair_id
     end
   end
 end

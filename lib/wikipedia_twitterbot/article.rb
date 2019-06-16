@@ -3,10 +3,13 @@ require 'activerecord-import'
 require 'sqlite3'
 require 'logger'
 require 'fileutils'
+require 'watir'
+require 'webdrivers'
 require_relative 'tweet'
 require_relative 'twitter_client'
 require_relative 'find_images'
 require_relative 'article_text_cleaner'
+require_relative 'experiment'
 
 class Article < ActiveRecord::Base
   class << self
@@ -24,6 +27,15 @@ class Article < ActiveRecord::Base
   end
 
   serialize :ores_data, Hash
+  serialize :details, Hash
+  belongs_to :experiment_pair, class_name: 'Article', foreign_key: 'experiment_pair_id'
+
+  ######################
+  # Experiment details #
+  ######################
+  EXPERIMENT = 0
+  CONTROL = 1
+
   #################
   # Class methods #
   #################
@@ -112,6 +124,11 @@ class Article < ActiveRecord::Base
     raise e
   end
 
+  def tweet_with_screenshot(tweet_text)
+    make_screenshot
+    tweet(tweet_text, filename: screenshot_path)
+  end
+
   def screenshot_path
     FileUtils.mkdir_p('screenshots') unless File.directory?('screenshots')
     "screenshots/#{escaped_title}.png"
@@ -152,12 +169,13 @@ class Article < ActiveRecord::Base
     pp RASTERIZE_PATH
   end
 
-  RASTERIZE_PATH = "#{__dir__}/rasterize.js".freeze
   def make_screenshot
-    # Use rasterize script to make a screenshot
-    %x[phantomjs #{RASTERIZE_PATH} #{mobile_url} #{screenshot_path} 1000px*1000px]
-    # Trim any extra blank space, which may or may not be present.
-    %x[convert #{screenshot_path} -trim #{screenshot_path}]
+    # Use Watir/Chromedriver to make a screenshot
+    browser = Watir::Browser.new :chrome, headless: true
+    browser.window.resize_to(800, 1600)
+    browser.goto mobile_url
+    browser.screenshot.save screenshot_path
+    # %x[convert #{screenshot_path} -trim #{screenshot_path}]
   end
 
   def hashtag
