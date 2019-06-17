@@ -172,10 +172,11 @@ class Article < ActiveRecord::Base
   def make_screenshot
     # Use Watir/Chromedriver to make a screenshot
     browser = Watir::Browser.new :chrome, headless: true
-    browser.window.resize_to(800, 1600)
+    browser.window.resize_to(800, 1000)
     browser.goto mobile_url
     browser.screenshot.save screenshot_path
-    # %x[convert #{screenshot_path} -trim #{screenshot_path}]
+    # crop the search box and the scroll bar
+    `convert #{screenshot_path} -crop -14+52 #{screenshot_path}`
   end
 
   def hashtag
