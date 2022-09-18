@@ -65,7 +65,6 @@ class Ores
   def query_url(rev_id)
     base_url = "/v2/scores/#{@project_code}/wp10/"
     url = base_url + rev_id.to_s + '/?features'
-    url = URI.encode url
     url
   end
 
